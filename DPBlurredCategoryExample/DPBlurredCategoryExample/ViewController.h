@@ -10,6 +10,7 @@
 
 @interface ViewController : UIViewController{
     CGPoint beginCenter;
+    CGSize beginSize;
 }
 @property (weak, nonatomic) IBOutlet UIView *blurringView;
 @property (weak, nonatomic) IBOutlet UISlider *sl_radius;

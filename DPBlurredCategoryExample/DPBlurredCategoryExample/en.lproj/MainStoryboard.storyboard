@@ -31,7 +31,7 @@
                                     <action selector="stopBlurring:" destination="2" eventType="touchUpInside" id="FSn-Qg-EzZ"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="25" minValue="0.0" maxValue="50" id="lXg-2K-95g">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="1" maxValue="10" id="lXg-2K-95g">
                                 <rect key="frame" x="18" y="475" width="284" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <connections>

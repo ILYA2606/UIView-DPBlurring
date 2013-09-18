@@ -27,6 +27,9 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     pan.maximumNumberOfTouches = 1;
     [_blurringView addGestureRecognizer:pan];
+    
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(didPinch:)];
+    [_blurringView addGestureRecognizer:pinch];
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,6 +54,28 @@
         else if(futureCenterPoint.y + _blurringView.frame.size.height/2 > self.view.bounds.size.height)
             futureCenterPoint.y = self.view.bounds.size.height - _blurringView.frame.size.height/2;
         _blurringView.center = futureCenterPoint;
+    }
+}
+
+-(void)didPinch:(UIPinchGestureRecognizer*)pinch{
+    if(pinch.state == UIGestureRecognizerStateBegan){
+        beginCenter = _blurringView.center;
+        beginSize = _blurringView.frame.size;
+    }
+    else if(pinch.state == UIGestureRecognizerStateChanged){
+        NSLog(@"%f", pinch.scale);
+        float scale = pinch.scale;
+        float newWidth = beginSize.width*scale;
+        float newHeight = beginSize.height*scale;
+        if(beginCenter.x-newWidth/2 < 0)
+            newWidth = beginCenter.x * 2;
+        if(beginCenter.x+newWidth/2 > self.view.bounds.size.width)
+            newWidth = (self.view.bounds.size.width - beginCenter.x) * 2;
+        if(beginCenter.y-newHeight/2 < 0)
+            newHeight = beginCenter.y * 2;
+        if(beginCenter.y+newHeight/2 > self.view.bounds.size.height)
+            newHeight = (self.view.bounds.size.height - beginCenter.y) * 2;
+        _blurringView.frame = CGRectMake(beginCenter.x-newWidth/2, beginCenter.y-newHeight/2, newWidth, newHeight);
     }
 }
 
