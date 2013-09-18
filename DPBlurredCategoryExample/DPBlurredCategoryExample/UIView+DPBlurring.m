@@ -64,7 +64,7 @@ static char const * const blurringFPSKey = "blurringFPS";
     self.timerForBlurring = [NSTimer scheduledTimerWithTimeInterval:1/self.blurringFPS target:self selector:@selector(timerLoop) userInfo:nil repeats:YES];
 }
 
-//stopping timer for blurring (freeze background color)
+//stopping timer for blurring
 -(void)stopBlurring{
     [[self viewWithTag:2606] removeFromSuperview];
     [self.timerForBlurring invalidate];
@@ -86,8 +86,7 @@ static char const * const blurringFPSKey = "blurringFPS";
     //hide our view before capturing superview
     self.hidden = YES;
     //capturing superview
-    CGSize miniSize = {rectSuperview.size.width/3, rectSuperview.size.height/3};
-    UIGraphicsBeginImageContextWithOptions(rectSuperview.size, NO, 1.0/20);
+    UIGraphicsBeginImageContextWithOptions(rectSuperview.size, YES, 1.0/20);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, -rectSuperview.origin.x, -rectSuperview.origin.y);
     CALayer *layer = self.superview.layer;
@@ -97,25 +96,18 @@ static char const * const blurringFPSKey = "blurringFPS";
     //show our view after capturing superview
     self.hidden = NO;
     UIImage *scaledImage = [self scaleImage:image withRatio:0.1];
-    //NSLog(@"scaledImage = %@, image = %@", NSStringFromCGSize(scaledImage.size), NSStringFromCGSize(image.size));
     return scaledImage;
 }
 -(UIImage*)scaleImage:(UIImage*)image withRatio:(float) scaleRatio
 {
     CGSize scaledSize = CGSizeMake(image.size.width * scaleRatio, image.size.height * scaleRatio);
-    
-    //The output context.
     UIGraphicsBeginImageContext(scaledSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
     //Percent (101%)
 #define SCALE_OVER_A_BIT 1.01
-    
     //Scale.
     CGContextScaleCTM(context, scaleRatio * SCALE_OVER_A_BIT, scaleRatio * SCALE_OVER_A_BIT);
     [image drawAtPoint:CGPointZero];
-    
-    //End?
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return scaledImage;
